@@ -11,7 +11,7 @@ const pool = new Pool({
     port: parseInt(process.env.DB_PORT || '5432'),
 });
 
-const query = (text: string, param?: any[]) => pool.query(text,param)
+export const query = (text: string, param?: any[]) => pool.query(text,param)
 
 export const testDBConnection = async () => {
     try{
