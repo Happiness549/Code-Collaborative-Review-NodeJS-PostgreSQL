@@ -4,10 +4,10 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response) => {
-    const {email, password} = req.body
-    if(!email || !password){
+    const {email, password, role} = req.body
+    if(!email || !password || !role){
         
-        return res.status(400).json({message: "Email and password are required"});
+        return res.status(400).json({message: "Email, password, and role are required"});
     }
 
     try{
@@ -15,7 +15,7 @@ export const register = async (req: Request, res: Response) => {
         if(existingUser){
             return res.status(409).json({message: "Email is already in use"});
         }
-        const user = await UserService.createUser(email, password);
+        const user = await UserService.createUser(email, password, role);
         return res.status(201).json({message: "User registered successfully"})
 
     }catch(error){
