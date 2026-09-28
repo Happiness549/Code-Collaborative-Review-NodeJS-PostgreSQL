@@ -12,7 +12,7 @@ const startServer = async () => {
 
     await testDBConnection();
     app.use(express.json());
-    app.use('/api/auth', authRoutes )
+    app.use('/api/users', authRoutes )
     app.use('/api', authRoutes);
 
     app.listen(PORT, () => {
