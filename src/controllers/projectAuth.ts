@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import * as projectService from '../service/projectService'
+import { query } from "../config/database";
+
+import { Pool } from "pg";
 
 
 export const addProject = async (req: Request, res: Response) => {
     try{
-        const newApplication = await projectService.createProject(req.body, req.user!.id)
-        res.status(201).json(newApplication)
+        const project = await projectService.createProject(req.body, req.user!.id)
+        res.status(201).json(project)
     }catch(error){
 
         console.error("Controller Error:", error);
@@ -16,9 +19,27 @@ export const addProject = async (req: Request, res: Response) => {
 
 export const getAllProjects = async (req: Request, res: Response) => {
     try{
-        const projectss = await projectService.findAllProjects();
-        res.status(200).json(projectss);
+        const projects = await projectService.findAllProjects();
+        res.status(200).json(projects);
     }catch(error){
+        console.error("Error Error:", error);
         res.status(500).json({message: "Error retrieving projects"});
+    }
+};
+
+export const assignUserToProject = async (req: Request, res: Response) =>{
+    try{
+        const {id} = req.params;
+        const {userId} = req.body;
+
+        const result = await query(`INSERT INTO project_members (project_id, user_id) VALUES ($1,$2) RETURNING *`,
+            [id, userId]
+        );
+        res.status(201).json({message: "User assigned to project successfully",
+            member: result.rows[0]
+        });
+    }catch(error){
+         console.error("Error Error:", error);
+        res.status(500).json({message: "Failed to assign user to project"});
     }
 };
