@@ -15,8 +15,10 @@ export const createProject = async (appData: Project, userId:number): Promise<Pr
 
 export const findAllProjects = async (): Promise<Project[]> => {
     const {rows} = await query(
-        "SELECT * FROM projects ORDER BY applied_at DESC"
+        "SELECT * FROM projects ORDER BY created_at"
 
     );
     return rows
 }
+
+

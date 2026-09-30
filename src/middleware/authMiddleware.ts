@@ -3,37 +3,29 @@ import jwt from 'jsonwebtoken'
 import { findUserByEmail } from "../service/userService";
 import {User} from "../types/user.types"
 
-interface JwtPayload {
-    
+interface JwtPayload {  
     email: string
 }
 
-export const protect = async (req: Request,res: Response,next: NextFunction) => {
-    let token;
-    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
-        try{
-            console.log(req.headers);
-            token = req.headers.authorization.split(" ")[1]
-            const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
+export const protect = async (req: Request, res: Response, next: NextFunction) => {
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    try {
+      console.log(req.headers);
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+      
+      const user: User | null = await findUserByEmail(decoded.email);
+      req.user = user || undefined;
 
-            const user: User | null = await findUserByEmail(decoded.email)
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authorized, user not found" });
+      }
 
-            req.user = user || undefined
-
-
-            if(!req.user) {
-                return res
-                .status(401)
-                .json({message: "Not authorized, user not found"});
-            }
-
-            return next()
-        }catch(error){
-            res.status(401).json({message: "Not authorized, token failed"})
-        }
-    }else{
-        return res.status(401).json({message: "Not authorized, no token"})
-
+      return next();
+    } catch (error) {
+      return res.status(401).json({ message: "Not authorized, token failed" });
     }
-    return res.status(401).json({message: "Not authorized"});
-    };
+  }
+
+  return res.status(401).json({ message: "Not authorized, no token" });
+};

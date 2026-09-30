@@ -51,7 +51,7 @@ export const updateUser = async (id: number, appData:User): Promise<User | null>
 };
 
 export const deleteUser = async (id:number): Promise<User | null> =>{
-    const {rows} = await query(" DELETE FROM user WHERE id = $1 RETURNING *", [id]
+    const {rows} = await query(" DELETE FROM users WHERE id = $1 RETURNING *", [id]
 
     );
     return rows[0] || null;

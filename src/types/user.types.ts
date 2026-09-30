@@ -8,3 +8,10 @@ export interface User{
     role: userRoles;
     created_at: Date;
 }
+
+export interface Project{
+    id: number
+    name: string;
+    description: string
+    userId: number;
+}

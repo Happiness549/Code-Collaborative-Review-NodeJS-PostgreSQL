@@ -43,3 +43,18 @@ export const assignUserToProject = async (req: Request, res: Response) =>{
         res.status(500).json({message: "Failed to assign user to project"});
     }
 };
+
+export const removeUserFromProject = async (req: Request, res: Response) => {
+    try{
+        const {id, userId} = req.params;
+        const result = await query(`DELETE FROM project_members WHERE project_id = $1 AND  user_id = $2 RETURNING *`,
+            [id, userId]
+        );
+        if(result.rows.length === 0 ){
+            return res.status(404).json({message: "User is not a member of this project"});
+        } 
+
+        }catch (error){
+            res.status(500).json({message: "Failed to remove user from project"});
+    }
+};
