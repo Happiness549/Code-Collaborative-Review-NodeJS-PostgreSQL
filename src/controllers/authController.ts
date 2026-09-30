@@ -6,8 +6,7 @@ import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response) => {
     const {email, password, role, name} = req.body
-    if(!email || !password || !role || !name){
-        
+    if(!email || !password || !role || !name){    
         return res.status(400).json({message: "Email, password, role, and name are required" });
     }
 
@@ -61,7 +60,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         const users = await UserService.findAllUsers();
         return res.status(200).json(users);
     }catch(error){
-        
+        console.error("Login Error:", error);
         return res.status(500).json({message: "Error retrieving users"});
     }
 };
@@ -104,13 +103,16 @@ export const deleteUserById = async (req: Request, res: Response) => {
         const id = parseInt(String(req.params.id));
         const deletedUser = await UserService.deleteUser(id)
         if(!deletedUser){
-            res.status(404).json({message: "Application not found"});
+            return res.status(404).json({message: "Application not found"});
         }
 
-        res.status(200).json({message: "User deleted successfully"})
+        return res.status(200).json({message: "User deleted successfully"})
          
     }catch(error){
-        res.status(500).json({message: "Error deleting the user"})
+        return res.status(500).json({message: "Error deleting the user"})
 
     }
 };
+
+
+

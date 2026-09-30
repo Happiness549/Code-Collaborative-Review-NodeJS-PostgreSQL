@@ -55,6 +55,7 @@ export const removeUserFromProject = async (req: Request, res: Response) => {
         } 
 
         }catch (error){
+             console.error("Error Error:", error);
             res.status(500).json({message: "Failed to remove user from project"});
     }
 };

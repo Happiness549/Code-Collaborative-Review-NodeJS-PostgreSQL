@@ -14,4 +14,5 @@ export interface Project{
     name: string;
     description: string
     userId: number;
+    membersId: number[];
 }

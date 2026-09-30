@@ -1,5 +1,16 @@
 ## Creating Tables
 ``` sql
+
+CREATE TABLE users(
+id SERIAL PRIMARY KEY,
+email VARCHAR(255),
+name VARCHAR(100) NOT NULL;
+role user_role NOT NULL DEFAULT 'Submitter',
+password_hash(255) NOT NULL,
+craeted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+
+);
+
 CREATE TABLE projects(
 id SERIAL PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
@@ -15,14 +26,5 @@ user_id INTEGER NOT NULL REFERENCES users(id),
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE users(
-id SERIAL PRIMARY KEY,
-email VARCHAR(255),
-name VARCHAR(100) NOT NULL;
-role user_role NOT NULL DEFAULT 'Submitter',
-password_hash(255) NOT NULL,
 
-craeted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-
-);
 ```
