@@ -27,3 +27,14 @@ export const getSubmissionsByProject = async (projectId: number) => {
   
   return rows;
 };
+
+export const getSubmissionById = async (id: number) => {
+  const { rows } = await query(
+    `SELECT * FROM submissions 
+     WHERE id = $1`, 
+    [id]
+  );
+  
+  return rows[0] || null; 
+};
+
