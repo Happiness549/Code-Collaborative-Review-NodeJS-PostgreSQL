@@ -16,7 +16,7 @@ const startServer = async () => {
     app.use(express.json());
     app.use('/api/users', authRoutes )
     app.use('/api/projects', projectRoutes);
-    app.use('/api/submissions', submissionRoutes);
+    app.use('/api/projects/submissions', submissionRoutes);
 
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
