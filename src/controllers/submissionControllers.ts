@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import {createSubmissions} from '../service/submissionService'
+import {createSubmissions, getSubmissionsByProject} from '../service/submissionService'
 import * as submissionService from '../service/submissionService'
 
 
@@ -22,4 +22,24 @@ export const Submission = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Failed to create submission" });
     }
 };
+
+
+export const getProjectSubmissions = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ message: "Project ID is required in the URL parameters." });
+        }
+
+        const submissions = await getSubmissionsByProject(Number(id));
+
+        
+        return res.status(200).json({ submissions });
+    } catch (error) {
+        console.error("Get Project Submissions Error:", error);
+        return res.status(500).json({ message: "Failed to retrieve submissions for this project." });
+    }
+};
+
 
