@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import * as projectService from '../service/projectService'
 import { query } from "../config/database";
 
-import { Pool } from "pg";
 
 
 export const addProject = async (req: Request, res: Response) => {
@@ -27,16 +26,14 @@ export const getAllProjects = async (req: Request, res: Response) => {
     }
 };
 
-export const assignUserToProject = async (req: Request, res: Response) =>{
+export const assignMemberToProject = async (req: Request, res: Response) =>{
     try{
         const {id} = req.params;
         const {userId} = req.body;
 
-        const result = await query(`INSERT INTO project_members (project_id, user_id) VALUES ($1,$2) RETURNING *`,
-            [id, userId]
-        );
+        const project = await projectService.assignMemberToProject(Number(userId), Number(id));
         res.status(201).json({message: "User assigned to project successfully",
-            member: result.rows[0]
+            member: project
         });
     }catch(error){
          console.error("Error Error:", error);
