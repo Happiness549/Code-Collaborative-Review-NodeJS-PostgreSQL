@@ -23,8 +23,9 @@ CREATE TABLE project_members(
 id SERIAL PRIMARY KEY,
 project_id INTEGER NOT NULL REFERENCES projects(id),
 user_id INTEGER NOT NULL REFERENCES users(id),
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+assigned_members INT[] DEFAULT '{}'
 );
 
-
 ```
+
