@@ -13,6 +13,6 @@ export interface Project{
     id: number
     name: string;
     description: string
-    userId: number;
-    membersId: number[];
+    createdBy: number;
+    assignedMembers: number[];
 }
