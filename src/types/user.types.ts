@@ -16,3 +16,14 @@ export interface Project{
     createdBy: number;
     assignedMembers: number[];
 }
+
+export type submissionStatus = 'Pending' | 'in_review' | 'Approved' | 'Changes_requested';
+export interface Submission{
+    id: number;
+    projectId: number;
+    title: string;
+    code: string;
+    fileName: string;
+    status: submissionStatus;
+    createdAt: Date;
+}
