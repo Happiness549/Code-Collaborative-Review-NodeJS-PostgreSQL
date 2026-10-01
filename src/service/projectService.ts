@@ -21,11 +21,11 @@ export const findAllProjects = async (): Promise<Project[]> => {
     return rows
 };
 
-export const addMemberToProject = async (memberId: number, projectId: number): Promise<Project | null> => {
-  const { rows } = await query(
-    `UPDATE projects 
-     SET assigned_members = array_append(assigned_members, $1) 
-     WHERE id = $2 
+export const assignMemberToProject = async (memberId: number, projectId: number): Promise<Project | null> => {
+ const { rows } = await query(
+    `UPDATE projects
+    SET  assigned_members = array_append(assigned_members, $1)
+     WHERE id = $2
      RETURNING *`,
     [memberId, projectId]
   );
