@@ -27,5 +27,16 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 assigned_members INT[] DEFAULT '{}'
 );
 
+CREATE TABLE submissions(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    file_name VARCHAR(150) NOT NULL;
+    code VARCHAR(550) NOT NULL;
+    project_id INT NOT NULL REFERENCES project(id,
+    status submission_status DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+);
+
+CREATE TYPE submission_status AS ENUM ('Pending', 'In_review', 'Approved', 'Changes_requested');
 ```
 
