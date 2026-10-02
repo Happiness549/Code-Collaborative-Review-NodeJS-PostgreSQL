@@ -38,5 +38,16 @@ CREATE TABLE submissions(
 );
 
 CREATE TYPE submission_status AS ENUM ('Pending', 'In_review', 'Approved', 'Changes_requested');
-```
 
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    submission_id INTEGER NOT NULL REFERENCES submissions(id),
+    general_comments VARCHAR(1000) NOT NULL;
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+```
