@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import {createSubmissions, getSubmissionsByProject, getSubmissionById} from '../service/submissionService'
+import {createSubmissions, getSubmissionsByProject, getSubmissionById, updateSubmissionStatusById, deleteSubmissionById} from '../service/submissionService'
 import * as submissionService from '../service/submissionService'
 
 
@@ -66,5 +66,32 @@ export const getSingleSubmission = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Failed to retrieve the submission." });
     }
 };
+
+export const updateSubmissionStatus = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ message: "Submission ID is required in URL path parameters." });
+        }
+
+        if (!status) {
+            return res.status(400).json({ message: "Status is required in the request body." });
+        }
+
+        const updatedSubmission = await updateSubmissionStatusById(Number(id), status);
+        
+        if (!updatedSubmission) {
+            return res.status(404).json({ message: `Submission with ID ${id} not found.` });
+        }
+
+        return res.status(200).json({ submission: updatedSubmission });
+    } catch (error) {
+        console.error("Update Submission Status Error:", error);
+        return res.status(500).json({ message: "Failed to update the submission status." });
+    }
+};
+
 
 
