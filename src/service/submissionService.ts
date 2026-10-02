@@ -51,3 +51,13 @@ export const updateSubmissionStatusById = async (id: number, status: string) => 
 };
 
 
+export const deleteSubmissionById = async (id: number) => {
+  const { rows } = await query(
+    `DELETE FROM submissions 
+     WHERE id = $1 
+     RETURNING *`,
+    [id]
+  );
+  
+  return rows[0] || null;
+};
