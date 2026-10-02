@@ -94,4 +94,26 @@ export const updateSubmissionStatus = async (req: Request, res: Response) => {
 };
 
 
+export const deleteSubmission = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
 
+        if (!id) {
+            return res.status(400).json({ message: "Submission ID is required in URL path parameters." });
+        }
+
+        const deletedSubmission = await deleteSubmissionById(Number(id));
+        
+        if (!deletedSubmission) {
+            return res.status(404).json({ message: `Submission with ID ${id} not found.` });
+        }
+
+        return res.status(200).json({ 
+            message: "Submission successfully deleted.", 
+            submission: deletedSubmission 
+        });
+    } catch (error) {
+        console.error("Delete Submission Error:", error);
+        return res.status(500).json({ message: "Failed to delete the submission." });
+    }
+};
