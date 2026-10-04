@@ -4,6 +4,7 @@ import {testDBConnection} from './config/database'
 import authRoutes from './routes/authRoutes'
 import projectRoutes from './routes/projectRoutes'
 import submissionRoutes from './routes/submissionRoutes'
+import commentRoutes from "./routes/commentRoutes";
 
 dotenv.config()
 
@@ -19,6 +20,7 @@ const startServer = async () => {
     app.use('/api/users', authRoutes )
     app.use('/api/projects', projectRoutes);
     app.use('/api/projects/submissions', submissionRoutes);
+    app.use("/api", commentRoutes);
 
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
