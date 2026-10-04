@@ -61,4 +61,12 @@ CREATE TABLE comments (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    submission_id INTEGER NOT NULL REFERENCES submissions(id),
+    reviewer_id INTEGER NOT NULL REFERENCES users(id),
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
