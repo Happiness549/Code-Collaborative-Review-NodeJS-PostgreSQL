@@ -1,31 +1,66 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 import { findUserByEmail } from "../service/userService";
-import {User} from "../types/user.types"
+import { User } from "../types/user.types";
 
-interface JwtPayload {  
-    email: string
+interface JwtPayload {
+    email: string;
 }
 
-export const protect = async (req: Request, res: Response, next: NextFunction) => {
-  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-    try {
-      console.log(req.headers);
-      const token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-      
-      const user: User | null = await findUserByEmail(decoded.email);
-      req.user = user || undefined;
+export const protect = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer")
+    ) {
+        try {
+            console.log(req.headers);
 
-      if (!req.user) {
-        return res.status(401).json({ message: "Not authorized, user not found" });
-      }
+            const token = req.headers.authorization.split(" ")[1];
 
-      return next();
-    } catch (error) {
-      return res.status(401).json({ message: "Not authorized, token failed" });
+            const decoded = jwt.verify(
+                token,
+                process.env.JWT_SECRET!
+            ) as JwtPayload;
+
+            const user: User | null = await findUserByEmail(decoded.email);
+
+            req.user = user || undefined;
+
+            if (!req.user) {
+                return res.status(401).json({
+                    message: "Not authorized, user not found"
+                });
+            }
+
+            return next();
+
+        } catch (error) {
+            return res.status(401).json({
+                message: "Not authorized, token failed"
+            });
+        }
     }
-  }
 
-  return res.status(401).json({ message: "Not authorized, no token" });
+    return res.status(401).json({
+        message: "Not authorized, no token"
+    });
+};
+
+
+export const reviewerOnly = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (req.user?.role !== "Reviewer") {
+        return res.status(403).json({
+            message: "Access denied. Reviewers only"
+        });
+    }
+
+    next();
 };
