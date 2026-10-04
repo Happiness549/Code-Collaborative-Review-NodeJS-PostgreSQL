@@ -2,10 +2,7 @@ import { query } from "../config/database";
 
 export const reviewService = {
 
-    approveSubmission: async (
-        submissionId: number,
-        reviewerId: number
-    ) => {
+    approveSubmission: async (submissionId: number, reviewerId: number) => {
         const result = await query(
             `UPDATE submissions
              SET status = 'approved'
